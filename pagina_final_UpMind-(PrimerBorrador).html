@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UpMind - Tu ayuda con Numéricas favorita</title>
+  <style>
+    /* ===========================
+       Estilos globales
+    =========================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Monaco", Monospace;
+    }
+
+    body {
+      background: linear-gradient(135deg, #002FFF, #00f2fe);
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* ===========================
+       Header y navegación
+    =========================== */
+    header {
+      background: linear-gradient(135deg, #002FFF, #00f2fe);
+      backdrop-filter: blur(12px);
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 15px;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    nav button {
+      background: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    nav button:hover {
+      background: #82FFF9;
+      color: black;
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ===========================
+       Secciones
+    =========================== */
+    main {
+      padding: 40px 20px;
+    }
+
+    section {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      margin: 30px auto;
+      max-width: 900px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
+
+    section:hover {
+      transform: translateY(-3px);
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+      color: #0078ff;
+      text-align: center;
+    }
+
+    h3 {
+      margin-top: 20px;
+      color: #444;
+    }
+
+    /* ===========================
+       Listas y contenedores
+    =========================== */
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul li {
+      background: #f5f7fa;
+      margin: 10px 0;
+      padding: 12px 18px;
+      border-left: 5px solid #0078ff;
+      border-radius: 8px;
+    }
+
+    /* ===========================
+       Botones calculadora
+    =========================== */
+    .calc-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .calc-container button {
+      background: linear-gradient(135deg, #0078ff, #00c6ff);
+      color: white;
+      border: none;
+      padding: 15px 25px;
+      border-radius: 15px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .calc-container button:hover {
+      background: linear-gradient(135deg, #00c6ff, #0078ff);
+      transform: scale(1.1);
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ===========================
+       Formulario de contacto
+    =========================== */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    input, textarea {
+      padding: 12px;
+      border-radius: 10px;
+      border: 2px solid #ddd;
+      font-size: 1rem;
+      width: 100%;
+      transition: 0.3s;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #0078ff;
+      outline: none;
+      box-shadow: 0 0 8px rgba(0, 120, 255, 0.4);
+    }
+
+    textarea {
+      resize: none;
+      min-height: 120px;
+    }
+
+    button#btn-enviar {
+      background: #00D11C;
+      color: white;
+      font-weight: bold;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button#btn-enviar:hover {
+      background: #00A316;
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+	  #btn-tutores {
+  background: linear-gradient(135deg, #ff7eb3, #ff758c); 
+  color: white;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 15px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+}
+
+#btn-tutores:hover {
+  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  transform: scale(1.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+    /* ===========================
+       Footer
+    =========================== */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.15);
+      color: white;
+      margin-top: 40px;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><center>UpMind</center></h1>
+    <nav>
+      <button id="btn-inicio">Start</button>
+      <button id="btn-servicios">Services</button>
+      <button id="btn-calculadoras">Calculators</button>
+      <button id="btn-contacto">Contact</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="inicio">
+      <h2><center>Welcome to UpMind</center></h2>
+      <p><center>Tutoring in the numerical area and support in basic calculations.</center></p>
+      <h3>Who are we?</h3>
+      <p><right>A team passionate about education and technology. We believe that knowledge is the key to transforming lives, which is why we created a platform that connects students with tutors quickly, easily, and effectively. Our commitment is to democratize access to quality education, promoting the personal, academic, and professional growth of every user.</right></p>
+      <br><br>
+      <h3>Vision:</h3>
+      <p><right>To become the leading digital education app in Latin America, connecting students and tutors through intelligent technology that enhances talent, fosters motivation, and opens doors to new opportunities.</right></p>
+      <br><br>
+      <h3>Mission:</h3>
+      <p><right>To offer an accessible, secure, and reliable digital space where students can find specialized tutors, personalized classes, and quality educational resources, using technological tools that make learning an effective, flexible, and engaging experience.</right></p>
+      <br><br>
+    </section>
+
+<section id="servicios">
+  <h2>Services</h2>
+  <ul>
+    <li>Personalized tutoring in mathematics and physics, both conceptual and fundamental</li>
+    <li>Basic problem solving</li>
+    <li>Advice on calculations and operations</li>
+  </ul>
+
+<div class="calc-container" style="margin-top:20px;">
+  <button id="btn-tutores">
+    Meet our tutors
+  </button>
+</div>
+</section>
+
+	<section id="calculadoras">
+	  <h2>Calculators</h2>
+	  <div class="calc-container">
+		<button id="btn-calculadora-basica">Basic Calculator</button>
+		<button id="btn-porcentaje">Percentages</button>
+		<button id="btn-promedio">Average</button>
+		<button id="btn-area-rectangulo">Area and Perimeters</button>
+	  </div>
+		</section>
+
+	<!-- Aquí falta cerrar la sección -->
+<section id="contacto">
+  <h2>Contact</h2>
+  <form id="form-contacto">
+    <input type="text" id="nombre" placeholder="Your Name" required>
+    <input type="email" id="correo" placeholder="Your email" required>
+    <textarea id="mensaje" placeholder="Write your message" required></textarea>
+    <button type="submit" class="btn-whatsapp">
+      <span>📩 Send your Message</span>
+    </button>
+  </form>
+
+  <style>
+    /* Botón de WhatsApp */
+    .btn-whatsapp {
+      background: #25D366; /* verde WhatsApp */
+      color: white;
+      border: none;
+      padding: 15px 35px;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 12px rgba(37, 211, 102, 0.5);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-whatsapp:hover {
+      background: #128C7E; /* verde más oscuro */
+      transform: scale(1.1) translateY(-3px);
+      box-shadow: 0 10px 20px rgba(37, 211, 102, 0.6);
+    }
+
+    .btn-whatsapp:active {
+      transform: scale(0.98);
+      box-shadow: 0 4px 10px rgba(37, 211, 102, 0.4);
+    }
+
+    /* Opcional: animación del icono */
+    .btn-whatsapp span {
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+
+    .btn-whatsapp:hover span {
+      transform: rotate(10deg);
+    }
+  </style>
+</section>
+</main>
+
+  <footer>
+    <p>&copy; 2025 UpMind. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- ===========================
+       JavaScript
+  =========================== -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Navegación por secciones
+  document.getElementById("btn-inicio").addEventListener("click", () => scrollToSection("inicio"));
+  document.getElementById("btn-servicios").addEventListener("click", () => scrollToSection("servicios"));
+  document.getElementById("btn-calculadoras").addEventListener("click", () => scrollToSection("calculadoras"));
+  document.getElementById("btn-contacto").addEventListener("click", () => scrollToSection("contacto"));
+
+  function scrollToSection(id) {
+    document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+  }
+  // Botones de calculadoras
+  document.getElementById("btn-calculadora-basica").addEventListener("click", () => {
+    location.href = "calculadora.html";
+  });
+
+  document.getElementById("btn-porcentaje").addEventListener("click", () => {
+    location.href = "porsentajes (3).html";
+  });
+
+  document.getElementById("btn-promedio").addEventListener("click", () => {
+    location.href = "average - copia.html";
+  });
+
+  document.getElementById("btn-area-rectangulo").addEventListener("click", () => {
+    location.href = "area_perimetro1.html";
+  });
+	document.getElementById("btn-tutores").addEventListener("click", () => {
+  location.href = "tutorias_upmind1.html"; // aquí va la página de tutores
+});
+
+document.getElementById("form-contacto").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  let nombre = document.getElementById("nombre").value;
+  let correo = document.getElementById("correo").value;
+  let mensaje = document.getElementById("mensaje").value;
+
+  let texto = `Helo, i am ${nombre}. My email is ${correo}. Menssage: ${mensaje}`;
+  let url = "https://wa.me/50235908867?text=" + encodeURIComponent(texto);
+
+  window.open(url, "_blank"); // Abre WhatsApp en otra pestaña
+  });
+});
+</script>
+</body>
+</html>

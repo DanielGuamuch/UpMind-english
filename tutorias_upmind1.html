@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mathematics Tutoring</title>
+  <style>
+    :root{
+      --bg1:#0f172a; /* deep blue */
+      --bg2:#07103a; /* darker */
+      --card:#ffffff;
+      --muted:#6b7280;
+      --accent:#0ea5e9;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, Arial, sans-serif;
+      background: linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:#0f172a;
+      min-height:100vh;
+      padding:40px 20px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+    }
+
+    .container{
+      width:1100px;
+      max-width:100%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.88));
+      border-radius:16px;
+      padding:28px;
+      box-shadow:0 10px 30px rgba(2,6,23,0.6);
+    }
+
+    header{
+      display:flex;
+      gap:20px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:18px;
+    }
+    header h1{margin:0;font-size:22px}
+    header p{margin:0;color:var(--muted);font-size:14px}
+
+    .controls{
+      display:flex;gap:8px;align-items:center
+    }
+    .search{padding:8px 12px;border-radius:10px;border:1px solid #e6e7ea}
+    .select{padding:8px 12px;border-radius:10px;border:1px solid #e6e7ea}
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:18px;
+    }
+
+    .card{
+      background:linear-gradient(180deg, #ffffff, #fbfdff);
+      border-radius:12px;
+      padding:12px;
+      box-shadow:0 6px 18px rgba(15,23,42,0.08);
+      transform-origin:center;
+      overflow:hidden;
+      transition:transform .28s ease, box-shadow .28s ease;
+      position:relative;
+    }
+    .card:hover{transform:translateY(-8px) scale(1.01);box-shadow:0 18px 40px rgba(2,6,23,0.12)}
+
+    .photo {
+        width: 100%;
+        height: 400px;   /* 👈 adjust the height here */
+        border-radius: 10px;
+        background-size: cover;   /* "cover" fills the space and crops overflow */
+        background-position: center; /* centers the image */
+        display: block;
+        margin-bottom: 10px;
+    }
+    .name{font-weight:700;font-size:16px;margin-bottom:6px}
+    .role{font-size:13px;color:var(--muted);margin-bottom:10px}
+    .strengths{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+    .tag{background:linear-gradient(90deg,rgba(14,165,233,0.11),rgba(99,102,241,0.07));padding:6px 8px;border-radius:999px;font-size:12px;color:#0b1220}
+
+    .actions{display:flex;gap:8px;align-items:center}
+    .btn{padding:8px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:600}
+    .btn-primary{background:linear-gradient(90deg,var(--accent),#7c3aed);color:white}
+    .btn-ghost{background:transparent;border:1px solid #e6e7ea}
+
+    /* small screens */
+    @media (max-width:900px){
+      .grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:620px){
+      .grid{grid-template-columns:1fr}
+      header{flex-direction:column;align-items:flex-start;gap:10px}
+    }
+
+    /* simple entrance animation */
+    .hidden{opacity:0;transform:translateY(18px) scale(.99)}
+    .reveal{opacity:1;transform:none;transition:opacity .6s ease, transform .6s cubic-bezier(.2,.9,.2,1)}
+
+    /* floating math icon */
+    .float-elem{
+      position:absolute;right:-24px;top:-24px;width:120px;height:120px;pointer-events:none;opacity:.06;filter:blur(0.4px)
+    }
+
+    /* simple modal for profile */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,0.5);display:flex;align-items:center;justify-content:center;z-index:60}
+    .modal{background:white;border-radius:12px;padding:18px;max-width:420px;width:90%;box-shadow:0 12px 40px rgba(2,6,23,0.25)}
+    .modal h3{margin:0 0 8px}
+    .modal p{margin:6px 0;color:var(--muted)}
+
+  </style>
+</head>
+<body>
+  <div class="container" role="application">
+    <header>
+      <div>
+        <h1>Mathematics Tutoring</h1>
+        <p>Select a tutor, review their strengths, and contact me on WhatsApp.</p>
+      </div>
+
+      <div class="controls">
+        <input id="search" class="search" placeholder="Search by name or skill" />
+        <select id="level" class="select">
+          <option value="">All levels</option>
+          <option value="basic">Essential</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+      </div>
+    </header>
+
+    <main>
+      <section id="grid" class="grid" aria-live="polite"></section>
+    </main>
+
+    <svg class="float-elem" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="g1" x1="0" x2="1">
+          <stop offset="0" stop-color="#0ea5e9" />
+          <stop offset="1" stop-color="#7c3aed" />
+        </linearGradient>
+      </defs>
+      <g fill="none" stroke="url(#g1)" stroke-width="6">
+        <circle cx="60" cy="60" r="40"/>
+        <path d="M20 140 C60 90, 140 90, 180 140" />
+      </g>
+    </svg>
+
+  </div>
+
+  <script>
+    // List of tutors (replace image/phone with real ones)
+    const tutors = [
+      {
+        name: 'Diego Peréz',
+        level: 'advanced',
+        strengths: ['Calculus', 'Linear Algebra', 'Differential Equations'],
+        photo: 'dapo.jpeg',
+        phone: '50246899847'
+      },
+      {
+        name: 'Andres Medina',
+        level: 'intermediate',
+        strengths: ['Arithmetic', 'Analytical Geometry', 'Exam Preparation'],
+        photo: 'andres.jpeg',
+        phone: '50251513232'
+      },
+      {
+        name: "Josue Aldana",
+        level: 'basic',
+        strengths: ['Arithmetic', 'Fractions', 'School Support'],
+        photo: 'david.jpeg',
+        phone: '50230196215'
+      },
+      {
+        name: 'Angel Jerez',
+        level: 'intermediate',
+        strengths: ['Probability', 'Statistics', 'Financial Mathematics'],
+        photo: 'angel.jpeg',
+        phone: '50236874549'
+      },
+      {
+        name: 'Dayana Alvarez',
+        level: 'basic',
+        strengths: ['Basic Algebra', 'Geometry', 'Personalized Tutoring'],
+        photo: 'dayana.jpeg',
+        phone: '50238350227'
+      },
+      {
+        name: "Diego Contreras",
+        level: 'advanced',
+        strengths: ['Advanced Mathematics', 'University Preparation', 'Research'],
+        photo: 'diego.jpeg',
+        phone: '50235908867'
+      }
+    ];
+
+    const grid = document.getElementById('grid');
+    const search = document.getElementById('search');
+    const level = document.getElementById('level');
+
+    // Build a card using DOM (avoids inline quote issues)
+    function buildCard(tutor){
+      const card = document.createElement('article');
+      card.className = 'card hidden';
+
+      const photo = document.createElement('div');
+      photo.className = 'photo';
+      photo.style.backgroundImage = `url("${tutor.photo}")`;
+
+      const nameEl = document.createElement('div');
+      nameEl.className = 'name';
+      nameEl.textContent = tutor.name;
+
+      const roleEl = document.createElement('div');
+      roleEl.className = 'role';
+      roleEl.textContent = `Level: ${tutor.level}`;
+
+      const strengthsEl = document.createElement('div');
+      strengthsEl.className = 'strengths';
+      tutor.strengths.forEach(s=>{
+        const tag = document.createElement('span');
+        tag.className = 'tag';
+        tag.textContent = s;
+        strengthsEl.appendChild(tag);
+      });
+
+      const actions = document.createElement('div');
+      actions.className = 'actions';
+
+      const btnWhats = document.createElement('button');
+      btnWhats.type = 'button';
+      btnWhats.className = 'btn btn-primary';
+      btnWhats.textContent = 'Contact on WhatsApp';
+      btnWhats.setAttribute('aria-label', `Contact ${tutor.name} on WhatsApp`);
+      btnWhats.addEventListener('click', ()=>{
+        const text = encodeURIComponent(`Hello ${tutor.name}, I am interested in taking classes with you. Are you available?`);
+        const url = `https://wa.me/${tutor.phone}?text=${text}`;
+        window.open(url, '_blank');
+      });
+
+      const btnProfile = document.createElement('button');
+      btnProfile.type = 'button';
+      btnProfile.className = 'btn btn-ghost';
+      btnProfile.textContent = 'View profile';
+      btnProfile.addEventListener('click', ()=> showProfile(tutor.name));
+
+      actions.appendChild(btnWhats);
+      actions.appendChild(btnProfile);
+
+      card.appendChild(photo);
+      card.appendChild(nameEl);
+      card.appendChild(roleEl);
+      card.appendChild(strengthsEl);
+      card.appendChild(actions);
+
+      return card;
+    }
+
+    function render(list){
+      grid.innerHTML='';
+      if(list.length===0){
+        grid.innerHTML = `<div style="grid-column:1/-1;padding:18px;color:var(--muted);">No tutors found.</div>`;
+        return;
+      }
+      list.forEach(t=>grid.appendChild(buildCard(t)));
+      // activate animations with small delay
+      requestAnimationFrame(()=>{
+        const cards = document.querySelectorAll('.card');
+        cards.forEach((c,i)=>setTimeout(()=>c.classList.add('reveal'), i*80));
+      })
+    }
+
+    function showProfile(name){
+      const t = tutors.find(x=>x.name===name);
+      if(!t) return;
+      // Show modal instead of alert for better UX
+      openProfileModal(t);
+    }
+
+    // Modal
+    function openProfileModal(tutor){
+      const backdrop = document.createElement('div');
+      backdrop.className = 'modal-backdrop';
+
+      const modal = document.createElement('div');
+      modal.className = 'modal';
+
+      const title = document.createElement('h3');
+      title.textContent = tutor.name;
+      const levelP = document.createElement('p');
+      levelP.textContent = `Level: ${tutor.level}`;
+      const strengthsP = document.createElement('p');
+      strengthsP.textContent = `Strengths: ${tutor.strengths.join(', ')}`;
+
+      const contact = document.createElement('p');
+      contact.innerHTML = `Contact: <strong>${tutor.phone}</strong>`;
+
+      const closeBtn = document.createElement('button');
+      closeBtn.type = 'button';
+      closeBtn.className = 'btn btn-ghost';
+      closeBtn.textContent = 'Close';
+      closeBtn.addEventListener('click', ()=> document.body.removeChild(backdrop));
+
+      modal.appendChild(title);
+      modal.appendChild(levelP);
+      modal.appendChild(strengthsP);
+      modal.appendChild(contact);
+      modal.appendChild(closeBtn);
+      backdrop.appendChild(modal);
+
+      backdrop.addEventListener('click', (e)=>{ if(e.target===backdrop) document.body.removeChild(backdrop); });
+
+      document.body.appendChild(backdrop);
+    }
+
+    function applyFilters(){
+      const q = search.value.trim().toLowerCase();
+      const lvl = level.value;
+      const filtered = tutors.filter(t=>{
+        const matchesQ = t.name.toLowerCase().includes(q) || t.strengths.some(s=>s.toLowerCase().includes(q));
+        const matchesL = lvl? t.level===lvl : true;
+        return matchesQ && matchesL;
+      });
+      render(filtered);
+    }
+
+    search.addEventListener('input', applyFilters);
+    level.addEventListener('change', applyFilters);
+
+    // initial render
+    render(tutors);
+
+    // small extra animation: subtle floating icon movement
+    let dir = 1;
+    setInterval(()=>{
+      const e = document.querySelector('.float-elem');
+      const r = parseFloat(getComputedStyle(e).right) || 0;
+      e.style.right = (r + 0.2*dir) + 'px';
+      if(r > -8 || r < -40) dir*=-1;
+    },40);
+
+  </script>
+</body>
+</html>

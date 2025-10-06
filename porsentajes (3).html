@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Percentage Calculator</title>
+  <style>
+    :root{
+      --card:#ffffff;
+      --accent:hsl(247, 94%, 49%);
+      --shadow:0 6px 18px rgba(15,40,70,0.15);
+    }
+    *{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial}
+    body{
+      margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px;
+      background:linear-gradient(270deg, #f6f6f7, #0756f3);
+      background-size:400% 400%;
+      animation:bgAnimation 12s ease infinite;
+    }
+    @keyframes bgAnimation {
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+    }
+    .container{width:100%;max-width:980px;background:var(--card);border-radius:18px;padding:22px;box-shadow:var(--shadow)}
+    header{display:flex;align-items:center;gap:14px}
+    header .logo{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#036df8);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;box-shadow:var(--shadow)}
+    h1{margin:0;font-size:24px;color:#023047}
+    p.lead{margin:6px 0 18px;color:#04566a}
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:16px}
+    .card{background:var(--card);padding:14px;border-radius:14px;box-shadow:var(--shadow)}
+    .calc{display:flex;flex-direction:column;gap:10px}
+    label{font-size:13px;color:#034049}
+    input[type=number], select{padding:8px 10px;border-radius:8px;border:1px solid rgba(3,64,73,0.1);background:#fafdff;outline:none}
+    .actions{display:flex;gap:8px;align-items:center}
+    
+    /* Custom styled buttons */
+    button{
+      position:relative;
+      background:var(--accent);
+      color:#f5fafc;
+      border:none;
+      padding:12px 16px;
+      border-radius:12px;
+      font-weight:600;
+      cursor:pointer;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      transition:transform 0.25s ease, background 0.3s ease;
+    }
+    button:hover{
+      background:#090909;
+      transform:translateY(-3px) scale(1.05);
+    }
+    button:active{
+      transform:scale(0.95);
+    }
+    button::after{
+      content:"";
+      position:absolute;
+      top:0;left:-100%;
+      width:100%;height:100%;
+      background:rgba(255,255,255,0.3);
+      transition:left 0.4s ease;
+    }
+    button:hover::after{
+      left:100%;
+    }
+
+    button.secondary{
+      background:#04a7f3;
+      color:#f3f7f8;
+    }
+    button.secondary:hover{
+      background:#f3f4f6;
+      color:#070707;
+    }
+
+    .result{background:#fafdff;border-radius:10px;padding:10px;border:1px solid rgba(3,64,73,0.08)}
+    .steps{background:#f8feff;border-radius:8px;padding:10px;border:1px dashed rgba(3,64,73,0.1);font-family:monospace;font-size:13px;color:#034049;white-space:pre-wrap}
+    .small{font-size:13px;color:#04566a}
+    footer{margin-top:12px;font-size:13px;color:#055b6b;text-align:center}
+    @media(max-width:880px){.grid{grid-template-columns:1fr;}.logo{width:56px;height:56px}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">%</div>
+      <div>
+        <h1>Percentage Calculator</h1>
+        <p></p>
+      </div>
+    </header>
+
+    <div class="grid" style="margin-top:14px">
+      <div class="card">
+        <div class="calc">
+          <!-- Percentage of a number -->
+          <div>
+            <h3 style="margin:6px 0">1) Percentage of a number</h3>
+            <label>Value (base)</label>
+            <input id="base1" type="number" step="any" placeholder="Ex: 250" />
+            <label>Percentage (%)</label>
+            <input id="pct1" type="number" step="any" placeholder="Ex: 15" />
+            <div class="actions">
+              <button id="calc1">Calculate</button>
+              <button class="secondary" id="clear1">Clear</button>
+            </div>
+            <div style="margin-top:8px">
+              <div class="small">Result:</div>
+              <div id="res1" class="result">—</div>
+            </div>
+            <div style="margin-top:8px">
+              <div class="small">Steps:</div>
+              <div id="steps1" class="steps">—</div>
+            </div>
+          </div>
+
+          <hr style="border:none;margin:12px 0;border-top:1px solid rgba(3,64,73,0.08)" />
+
+          <!-- What percentage is A of B -->
+          <div>
+            <h3 style="margin:6px 0">2) What percentage is A of B?</h3>
+            <label>Part (A)</label>
+            <input id="a2" type="number" step="any" placeholder="Ex: 45" />
+            <label>Total (B)</label>
+            <input id="b2" type="number" step="any" placeholder="Ex: 200" />
+            <div class="actions">
+              <button id="calc2">Calculate</button>
+              <button class="secondary" id="clear2">Clear</button>
+            </div>
+            <div style="margin-top:8px">
+              <div class="small">Result:</div>
+              <div id="res2" class="result">—</div>
+            </div>
+            <div style="margin-top:8px">
+              <div class="small">Steps:</div>
+              <div id="steps2" class="steps">—</div>
+            </div>
+          </div>
+
+          <hr style="border:none;margin:12px 0;border-top:1px solid rgba(3,64,73,0.08)" />
+
+          <!-- Percentage increase/decrease -->
+          <div>
+            <h3 style="margin:6px 0">3) Percentage Increase / Decrease</h3>
+            <label>Initial value</label>
+            <input id="orig3" type="number" step="any" placeholder="Ex: 120" />
+            <label>Percentage (%) (positive = increase, negative = decrease)</label>
+            <input id="pct3" type="number" step="any" placeholder="Ex: 20 or -15" />
+            <div class="actions">
+              <button id="calc3">Calculate</button>
+              <button class="secondary" id="clear3">Clear</button>
+            </div>
+            <div style="margin-top:8px">
+              <div class="small">Result:</div>
+              <div id="res3" class="result">—</div>
+            </div>
+            <div style="margin-top:8px">
+              <div class="small">Steps:</div>
+              <div id="steps3" class="steps">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="card">
+        <h3 style="margin:6px 0">Shortcuts and formulas</h3>
+        <div class="small" style="margin-bottom:8px">
+          <strong>Percentage of a number:</strong>
+          <div>Value × ( % / 100 )</div>
+        </div>
+        <div class="small" style="margin-bottom:8px">
+          <strong>What percentage is A of B?:</strong>
+          <div>(A / B) × 100</div>
+        </div>
+        <div class="small" style="margin-bottom:8px">
+          <strong>Increase/Decrease:</strong>
+          <div>Value × (1 ± %/100) → new value</div>
+        </div>
+        <hr style="border:none;margin:10px 0;border-top:1px solid rgba(3,64,73,0.08)" />
+        <p class="small">Tip: use the "Clear" button to erase inputs. Steps are displayed clearly and values are rounded to 2 decimals.</p>
+      </aside>
+    </div>
+
+  </div>
+
+  <script>
+    function round(v){return Math.round((v+Number.EPSILON)*100)/100}
+
+    // 1) Percentage of a number
+    const base1 = document.getElementById('base1');
+    const pct1 = document.getElementById('pct1');
+    const res1 = document.getElementById('res1');
+    const steps1 = document.getElementById('steps1');
+    document.getElementById('calc1').addEventListener('click', ()=>{
+      const base = parseFloat(base1.value);
+      const pct = parseFloat(pct1.value);
+      if(isNaN(base) || isNaN(pct)){
+        res1.textContent = 'Enter both values correctly.'; steps1.textContent='—'; return;
+      }
+      const value = base * (pct/100);
+      res1.textContent = `${round(value)} (which is ${round(pct)}% of ${round(base)})`;
+      steps1.textContent = `1) Write the formula: result = value × (percentage / 100)\n2) Substitute: result = ${base} × (${pct} / 100)\n3) Calculate the fraction: ${pct}/100 = ${round(pct/100)}\n4) Multiply: ${base} × ${round(pct/100)} = ${round(value)}\n\nResult: ${round(value)}`;
+    });
+    document.getElementById('clear1').addEventListener('click', ()=>{base1.value='';pct1.value='';res1.textContent='—';steps1.textContent='—'});
+
+    // 2) What percentage is A of B?
+    const a2 = document.getElementById('a2');
+    const b2 = document.getElementById('b2');
+    const res2 = document.getElementById('res2');
+    const steps2 = document.getElementById('steps2');
+    document.getElementById('calc2').addEventListener('click', ()=>{
+      const A = parseFloat(a2.value);
+      const B = parseFloat(b2.value);
+      if(isNaN(A) || isNaN(B) || B===0){res2.textContent='Enter valid values (B ≠ 0).'; steps2.textContent='—'; return}
+      const pct = (A / B) * 100;
+      res2.textContent = `${round(pct)}%`;
+      steps2.textContent = `1) Formula: percentage = (A / B) × 100\n2) Substitute: percentage = (${A} / ${B}) × 100\n3) Divide: ${A} / ${B} = ${round(A/B)}\n4) Multiply by 100: ${round(A/B)} × 100 = ${round(pct)}\n\nResult: ${round(pct)}%`;
+    });
+    document.getElementById('clear2').addEventListener('click', ()=>{a2.value='';b2.value='';res2.textContent='—';steps2.textContent='—'});
+
+    // 3) Percentage increase/decrease
+    const orig3 = document.getElementById('orig3');
+    const pct3 = document.getElementById('pct3');
+    const res3 = document.getElementById('res3');
+    const steps3 = document.getElementById('steps3');
+    document.getElementById('calc3').addEventListener('click', ()=>{
+      const orig = parseFloat(orig3.value);
+      const pct = parseFloat(pct3.value);
+      if(isNaN(orig) || isNaN(pct)){res3.textContent='Enter both values correctly.'; steps3.textContent='—'; return}
+      const factor = 1 + (pct/100);
+      const result = orig * factor;
+      const type = pct>=0 ? 'Increase' : 'Decrease';
+      res3.textContent = `${round(result)} (${type} of ${round(pct)}% over ${round(orig)})`;
+      steps3.textContent = `1) Formula: new value = initial_value × (1 + percentage/100)\n2) Substitute: new value = ${orig} × (1 + ${pct}/100)\n3) Calculate percentage/100: ${pct}/100 = ${round(pct/100)}\n4) Factor: 1 + ${round(pct/100)} = ${round(factor)}\n5) Multiply: ${orig} × ${round(factor)} = ${round(result)}\n\nResult: ${round(result)} (${type})`;
+    });
+    document.getElementById('clear3').addEventListener('click', ()=>{orig3.value='';pct3.value='';res3.textContent='—';steps3.textContent='—'});
+
+    document.querySelectorAll('input[type=number]').forEach(inp=>{
+      inp.addEventListener('input', ()=>{
+        if(inp.value.length>1 && inp.value[0]==='0' && inp.value[1] !=='.'){
+          inp.value = inp.value.replace(/^0+/, '') || '0';
+        }
+      });
+    });
+
+    document.addEventListener('keydown', (e)=>{
+      if(e.key==='Enter'){
+        const active = document.activeElement;
+        if([base1,pct1].includes(active)) document.getElementById('calc1').click();
+        if([a2,b2].includes(active)) document.getElementById('calc2').click();
+        if([orig3,pct3].includes(active)) document.getElementById('calc3').click();
+      }
+    });
+  </script>
+<style>
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #2a9df4, #042dfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Blinking effect */
+  .blink {
+    animation: blinkAnim 2s infinite;
+  }
+
+  @keyframes blinkAnim {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0; }
+  }
+</style>
+
+<script>
+  // Animated typing text
+  const title = document.querySelector("h1");
+  const text = "Percentage Calculator";
+  let i = 0;
+
+  function typeEffect() {
+    if (i < text.length) {
+      title.textContent += text.charAt(i);
+      i++;
+      setTimeout(typeEffect, 100);
+    } else {
+      // After typing ends → enable blinking
+      title.classList.add("blink");
+    }
+  }
+
+  // Reset and start animation
+  title.textContent = "";
+  typeEffect();
+</script>
+</body>
+</html>

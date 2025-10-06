@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Geometry - Area and Perimeter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      animation: fondo 4s infinite alternate;
+    }
+    @keyframes fondo {
+      0%   { background-color: #b3e5fc; }
+      100% { background-color: #0288d1; }
+    }
+    h1 {
+      text-align: center;
+      background: #01579b;
+      color: #e1f5fe;
+      padding: 10px;
+      border-radius: 8px;
+      width: 70%;
+      margin: 10px auto;
+    }
+    .contenedor {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 30px;
+      margin-top: 20px;
+    }
+    form, .resultado {
+      padding: 15px;
+      border: 2px solid #0288d1;
+      border-radius: 10px;
+      width: 300px;
+      background: #e1f5fe;
+    }
+    label {
+      display: block;
+      margin-top: 8px;
+    }
+    input {
+      width: 90%;
+      padding: 5px;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 15px;
+      background: linear-gradient(135deg, #0288d1, #01579b);
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+    }
+    button:hover {
+      background: linear-gradient(135deg, #0277bd, #014374);
+      transform: scale(1.05);
+    }
+    .dibujo {
+      border: 2px solid #0288d1;
+      border-radius: 10px;
+      padding: 10px;
+      background: #e1f5fe;
+      text-align: center;
+    }
+    #formula {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #01579b;
+    }
+  </style>
+</head>
+<body>
+  <h1>Geometric Shapes Calculator</h1>
+
+  <div class="contenedor">
+    <div>
+      <form id="formFiguras" onsubmit="calcular(event)">
+        <label>Select a shape:</label>
+        <select id="figura" onchange="mostrarCampos()" required>
+          <option value="">--Choose--</option>
+          <option value="cuadrado">Square</option>
+          <option value="rectangulo">Rectangle</option>
+          <option value="triangulo">Triangle</option>
+          <option value="circulo">Circle</option>
+        </select>
+
+        <div id="inputs"></div>
+        <button type="submit">Calculate</button>
+      </form>
+
+      <div class="resultado">
+        <h2>Result</h2>
+        <p id="resArea"></p>
+        <p id="resPerimetro"></p>
+      </div>
+    </div>
+
+    <div class="dibujo">
+      <canvas id="canvasFigura" width="300" height="300"></canvas>
+      <div id="formula"></div>
+    </div>
+  </div>
+
+  <script>
+    function mostrarCampos() {
+      const figura = document.getElementById("figura").value;
+      const inputs = document.getElementById("inputs");
+      const canvas = document.getElementById("canvasFigura");
+      const ctx = canvas.getContext("2d");
+
+      inputs.innerHTML = "";
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      document.getElementById("formula").textContent = "";
+
+      if (figura === "cuadrado") {
+        inputs.innerHTML = `<label>Side:</label><input type="number" id="lado" step="any" required>`;
+      } 
+      else if (figura === "rectangulo") {
+        inputs.innerHTML = `
+          <label>Base:</label><input type="number" id="base" step="any" required>
+          <label>Height:</label><input type="number" id="altura" step="any" required>`;
+      } 
+      else if (figura === "triangulo") {
+        inputs.innerHTML = `
+          <label>Base:</label><input type="number" id="base" step="any" required>
+          <label>Height:</label><input type="number" id="altura" step="any" required>
+          <label>Side 1:</label><input type="number" id="lado1" step="any" required>
+          <label>Side 2:</label><input type="number" id="lado2" step="any" required>
+          <label>Side 3:</label><input type="number" id="lado3" step="any" required>`;
+      } 
+      else if (figura === "circulo") {
+        inputs.innerHTML = `<label>Radius:</label><input type="number" id="radio" step="any" required>`;
+      }
+    }
+
+    function calcular(event) {
+      event.preventDefault();
+      const figura = document.getElementById("figura").value;
+      const canvas = document.getElementById("canvasFigura");
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.font = "14px Arial";
+      ctx.textAlign = "center";
+      ctx.fillStyle = "black";
+
+      let area = 0, perimetro = 0, formula = "";
+
+      if (figura === "cuadrado") {
+        const lado = parseFloat(document.getElementById("lado").value);
+        area = lado * lado;
+        perimetro = 4 * lado;
+        formula = "Area = side × side\nPerimeter = 4 × side";
+
+        ctx.strokeRect(100, 100, 100, 100);
+        ctx.fillText("Side = " + lado, 150, 80);
+        ctx.fillText("Side = " + lado, 150, 235);
+        ctx.fillText("Side = " + lado, 60, 150);
+        ctx.fillText("Side = " + lado, 240, 150);
+      }
+      else if (figura === "rectangulo") {
+        const base = parseFloat(document.getElementById("base").value);
+        const altura = parseFloat(document.getElementById("altura").value);
+        area = base * altura;
+        perimetro = 2 * (base + altura);
+        formula = "Area = base × height\nPerimeter = 2 × (base + height)";
+
+        ctx.strokeRect(90, 100, 120, 80);
+        ctx.fillText("Base = " + base, 150, 80);
+        ctx.fillText("Base = " + base, 150, 210);
+        ctx.fillText("Height = " + altura, 60, 145);
+        ctx.fillText("Height = " + altura, 240, 145);
+      }
+      else if (figura === "triangulo") {
+        const base = parseFloat(document.getElementById("base").value);
+        const altura = parseFloat(document.getElementById("altura").value);
+        const lado1 = parseFloat(document.getElementById("lado1").value);
+        const lado2 = parseFloat(document.getElementById("lado2").value);
+        const lado3 = parseFloat(document.getElementById("lado3").value);
+        area = (base * altura) / 2;
+        perimetro = lado1 + lado2 + lado3;
+        formula = "Area = (base × height) ÷ 2\nPerimeter = side1 + side2 + side3";
+
+        ctx.beginPath();
+        ctx.moveTo(150, 60);
+        ctx.lineTo(80, 200);
+        ctx.lineTo(220, 200);
+        ctx.closePath();
+        ctx.stroke();
+
+        ctx.fillText("Base = " + base, 150, 220);
+        ctx.fillText("Height = " + altura, 50, 130);
+        ctx.fillText("S1 = " + lado1, 150, 40);
+        ctx.fillText("S2 = " + lado2, 250, 130);
+        ctx.fillText("S3 = " + lado3, 150, 240);
+      }
+      else if (figura === "circulo") {
+        const radio = parseFloat(document.getElementById("radio").value);
+        area = Math.PI * Math.pow(radio, 2);
+        perimetro = 2 * Math.PI * radio;
+        formula = "Area = π × r²\nPerimeter = 2 × π × r";
+
+        ctx.beginPath();
+        ctx.arc(150, 150, 80, 0, 2 * Math.PI);
+        ctx.stroke();
+        ctx.fillText("Radius = " + radio, 150, 250);
+      }
+
+      document.getElementById("resArea").textContent = "Area: " + area.toFixed(2);
+      document.getElementById("resPerimetro").textContent = "Perimeter: " + perimetro.toFixed(2);
+      document.getElementById("formula").innerText = formula;
+    }
+  </script>
+</body>
+</html>

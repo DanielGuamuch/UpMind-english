@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>APP del año</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+  
+      body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #0a1f44; /* azul marino */
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-size: 32px;
+        color: #ffffff;
+      }
+  
+      .container {
+        background: #112e5f;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+        text-align: center;
+        border: 3px solid #ffffff33;
+        position: relative;
+        max-width: 600px;
+        width: 90%;
+      }
+  
+      h2 {
+        margin-bottom: 25px;
+        font-size: 42px;
+        color: #ffffff;
+      }
+  
+      .dropdown-container {
+        position: relative;
+        margin-bottom: 20px;
+      }
+  
+      .listbutton {
+        display: block;
+        width: 95%;
+        max-width: 400px;
+        padding: 15px;
+        border-radius: 15px;
+        border: 2px solid #ffffff;
+        font-size: 20px;
+        background-color: #1b3b73;
+        color: #ffffff;
+        text-align: center;
+        cursor: pointer;
+        margin: 0 auto;
+      }
+  
+      .dropdown {
+        display: none;
+        position: absolute;
+        background-color: #1b3b73;
+        border: 1px solid #ffffff66;
+        border-radius: 10px;
+        width: 100%;
+        max-width: 300px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        margin-top: 5px;
+      }
+  
+      .dropdown div {
+        padding: 10px;
+        cursor: pointer;
+        color: #ffffff;
+        font-size: 18px;
+      }
+  
+      .dropdown div:hover {
+        background-color: #274a85;
+      }
+  
+      .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 20px;
+      }
+  
+      .button-group button {
+        background-color: #274a85;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 20px;
+        font-size: 18px;
+        cursor: pointer;
+        transition: 0.3s ease;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+      }
+  
+      .button-group button:hover {
+        background-color: #3c5da9;
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  
+<body>
+  <div class="container">
+    <div class="bow"><div class="center"></div></div>
+    <h2>WELCOM TO UPMIND&nbsp;</h2>
+
+    <div class="dropdown-container">
+      <button id="nameButton" class="listbutton" onclick="toggleDropdown('nameMenu')">🧑‍🎓 Elegir Nombre</button>
+      <div id="nameMenu" class="dropdown">
+        <div onclick="selectName('David Véliz')">David Véliz</div>
+        <div onclick="selectName('Javier Castañeda')">Javier Castañeda</div>
+        <div onclick="selectName('Kevin Contreras')">Kevin Contreras</div>
+        <div onclick="selectName('Diego Contreras')">Diego Contreras</div>
+        <div onclick="selectName('Carlos Hernandez')">Carlos Hernandez</div>
+        <div onclick="selectName('Angel Jerez')">Angel Jerez</div>
+        <div onclick="selectName('Ana León')">Ana León</div>
+        <div onclick="selectName('Andrés Medina')">Andrés Medina</div>
+        <div onclick="selectName('Fatima Méndez')">Fatima Méndez</div>
+        <div onclick="selectName('Diego Pérez')">Diego Pérez</div>
+        <div onclick="selectName('Dayana Álvarez')">Dayana Álvarez</div>
+        <div onclick="selectName('Andrés Vásquez')">Andrés Vásquez</div>
+      </div>
+    </div>
+
+    <div class="dropdown-container">
+      <button id="careerButton" class="listbutton" onclick="toggleDropdown('careerMenu')">🎓 Elegir Carrera</button>
+      <div id="careerMenu" class="dropdown">
+        <div onclick="selectCareer('Cuarto Br. CCLL en computación')">Cuarto Br. CCLL en computación</div>
+        <div onclick="selectCareer('Cuarto Br. CCLL en computación con Diplomado en Diseño de Páginas Web')">Cuarto Br. CCLL en computación con Diplomado en Diseño de Páginas Web</div>
+      </div>
+    </div>
+
+    <div class="dropdown-container">
+      <input type="password" id="passwordInput" class="listbutton" placeholder="🔒 Ingresar contraseña">
+    </div>
+    <div class="button-group">
+      <button onclick="registerEntry()">Iniciar Sesión</button>
+    </div>
+  </div>
+
+  <script>
+    let selectedName = "";
+    let selectedCareer = "";
+    let selectedShift = "";
+
+    function toggleDropdown(menuId) {
+      const menu = document.getElementById(menuId);
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+
+    function selectName(name) {
+      selectedName = name;
+      document.getElementById("nameMenu").style.display = "none";
+      document.getElementById("nameButton").innerText = name;
+    }
+
+    function selectCareer(career) {
+      selectedCareer = career;
+      document.getElementById("careerMenu").style.display = "none";
+      document.getElementById("careerButton").innerText = career;
+    }
+
+    function selectShift(shift) {
+      selectedShift = shift;
+      document.getElementById("shiftMenu").style.display = "none";
+      document.getElementById("shiftButton").innerText = shift;
+    }
+
+    function registerEntry() {
+  const password = document.getElementById("passwordInput").value;
+
+  if (!selectedName) {
+    alert("Por favor selecciona tu nombre 🌸");
+    return;
+  }
+
+  if (!selectedCareer) {
+    alert("Por favor selecciona tu carrera 🎓");
+    return;
+  }
+
+  if (!password) {
+    alert("Por favor ingresa tu contraseña 🔒");
+    return;
+  }
+
+  // Validación de combinación nombre + carrera + contraseña
+  if (
+    (selectedName === "David Véliz" &&
+   selectedCareer === "Cuarto Br. CCLL en computación" &&
+   password === "david125@100") ||
+
+  (selectedName === "Javier Castañeda" &&
+   selectedCareer === "Cuarto Br. CCLL en computación" &&
+   password === "javier130@105") ||
+
+  (selectedName === "Kevin Contreras" &&
+   selectedCareer === "Cuarto Br. CCLL en computación" &&
+   password === "kevin135@110")||
+
+   (selectedName === "Diego Contreras" &&
+   selectedCareer === "Cuarto Br. CCLL en computación con Diplomado en Diseño de Páginas Web" &&
+   password === "diego140@115")||
+
+   (selectedName === "Carlos Hernandez" &&
+   selectedCareer === "Cuarto Br. CCLL en computación" &&
+   password === "carlos145@120")||
+
+   (selectedName === "Angel Jerez" &&
+   selectedCareer === "Cuarto Br. CCLL en computación" &&
+   password === "angel150@125")||
+
+   (selectedName === "Ana León" &&
+   selectedCareer === "Cuarto Br. CCLL en computación con Diplomado en Diseño de Páginas Web" &&
+   password === "ana155@130")||
+
+   (selectedName === "Andrés Medina" &&
+   selectedCareer === "Cuarto Br. CCLL en computación con Diplomado en Diseño de Páginas Web" &&
+   password === "andres160@135")||
+
+   (selectedName === "Fatima Méndez" &&
+   selectedCareer === "Cuarto Br. CCLL en computación con Diplomado en Diseño de Páginas Web" &&
+   password === "fatima160@140")||
+
+   (selectedName === "Diego Pérez" &&
+   selectedCareer === "Cuarto Br. CCLL en computación con Diplomado en Diseño de Páginas Web" &&
+   password === "diego165@145")||
+
+   (selectedName === "Dayana Álvarez" &&
+   selectedCareer === "Cuarto Br. CCLL en computación con Diplomado en Diseño de Páginas Web" &&
+   password === "dayana170@150")||
+
+   (selectedName === "Andrés Vásquez" &&
+   selectedCareer === "Cuarto Br. CCLL en computación" &&
+   password === "andres175@155")
+) {
+  alert(`Bienvenido/a ${selectedName} 👋\nCarrera: ${selectedCareer}\nInicio de sesión exitoso ✅`);
+  
+  // 👉 Redirección a otra página
+  window.location.href = "pagina_final_UpMind-(PrimerBorrador).html";  
+} else {
+  alert("Usuario, carrera o contraseña incorrecta ❌");
+}
+}
+
+
+  </script>
+</body>
+</html>

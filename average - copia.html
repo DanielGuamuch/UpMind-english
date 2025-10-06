@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Average of 4 Grades</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #b2ebf2, #4dd0e1, #26c6da);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    /* Page entry animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* 🔹 Animated title outside the box */
+    .main-title {
+      font-size: 38px;
+      font-weight: bold;
+      color: #004d40;
+      margin-bottom: 25px;
+      text-align: center;
+      animation: titleEntrance 2s ease-out forwards;
+    }
+
+    /* Animation: slide from top with bounce */
+    @keyframes titleEntrance {
+      0% { transform: translateY(-120px); opacity: 0; }
+      50% { transform: translateY(20px); opacity: 1; }
+      70% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+
+    .container {
+      background: #fff;
+      display: flex;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(77, 208, 225, 0.6);
+      overflow: hidden;
+      width: 700px;
+      max-width: 95%;
+      animation: slideIn 1s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Left column */
+    .form-section {
+      flex: 1;
+      padding: 25px;
+    }
+
+    .form-section h2 {
+      font-size: 22px;
+      margin-bottom: 15px;
+      color: #00796b;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+      color: #004d40;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #80deea;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input[type="number"]:focus {
+      border-color: #26c6da;
+      box-shadow: 0 0 8px rgba(77, 208, 225, 0.6);
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      background: #26c6da;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background: #00acc1;
+      transform: scale(1.05);
+    }
+
+    /* Right column */
+    .result-section {
+      flex: 1;
+      padding: 25px;
+      background: #f0fdfd;
+      border-left: 3px solid #4dd0e1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #result {
+      font-size: 20px;
+      font-weight: bold;
+      color: #006064;
+      margin-bottom: 15px;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    #result.show {
+      opacity: 1;
+    }
+
+    .result-image {
+      max-width: 150px;
+      margin-top: 10px;
+      display: none;
+      animation: bounceIn 0.8s;
+    }
+
+    @keyframes bounceIn {
+      0% { transform: scale(0.3); opacity: 0; }
+      50% { transform: scale(1.1); opacity: 1; }
+      70% { transform: scale(0.9); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <!-- 🔹 Animated title on top -->
+  <h1 class="main-title">📊 Average of 4 Grades 📊</h1>
+
+  <div class="container">
+    <!-- Left column -->
+    <div class="form-section">
+      <h2>Enter your grades</h2>
+      <form id="gradesForm">
+        <label for="grade1">Grade 1:</label>
+        <input type="number" id="grade1" min="0" max="100" required>
+        <label for="grade2">Grade 2:</label>
+        <input type="number" id="grade2" min="0" max="100" required>
+        <label for="grade3">Grade 3:</label>
+        <input type="number" id="grade3" min="0" max="100" required>
+        <label for="grade4">Grade 4:</label>
+        <input type="number" id="grade4" min="0" max="100" required>
+
+        <button type="button" onclick="calculateAverage()">Calculate</button>
+      </form>
+    </div>
+
+    <!-- Right column -->
+    <div class="result-section">
+      <div id="result">Average = ?</div>
+      <img id="image" class="result-image" src="" alt="Result">
+    </div>
+  </div>
+
+  <script>
+    function calculateAverage() {
+      const grades = [];
+      for (let i = 1; i <= 4; i++) {
+        const value = parseFloat(document.getElementById("grade" + i).value);
+        if (isNaN(value)) {
+          alert("Please enter all grades.");
+          return;
+        }
+        grades.push(value);
+      }
+
+      const sum = grades.reduce((a, b) => a + b, 0);
+      const average = (sum / grades.length).toFixed(2);
+
+      const result = document.getElementById("result");
+      const image = document.getElementById("image");
+
+      result.textContent = "Average = " + average;
+      result.classList.add("show");
+
+      if (average >= 60) {
+        image.src = "https://i.pinimg.com/736x/7b/86/d6/7b86d6429c47d7c4bfd9b19ade5447e9.jpg"; // Happy cat
+      } else {
+        image.src = "https://i.pinimg.com/736x/82/a8/06/82a806fc99a4ba73cc78774934f69ec1.jpg"; // Sad cat
+      }
+
+      image.style.display = "block";
+      image.style.animation = "bounceIn 0.8s";
+    }
+  </script>
+</body>
+</html>
